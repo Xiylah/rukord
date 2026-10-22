@@ -1,0 +1,38 @@
+name: Source checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: rukcord/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install client dependencies
+        working-directory: rukcord
+        run: npm ci --legacy-peer-deps --ignore-scripts --no-audit --no-fund
+      - name: Build client
+        working-directory: rukcord
+        run: node scripts/build.mjs --release-branch main --build-minify
+      - name: Test client
+        working-directory: rukcord
+        run: npm test
+      - name: Test native symbol checks
+        run: python tools/test_native_symbols.py
+      - name: Test IPA injection
+        run: python tools/test_ipa_macho.py
+      - name: Test signed loader comparison
+        run: python tools/test_ipa_validation.py
