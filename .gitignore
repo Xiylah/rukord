@@ -1,0 +1,9 @@
+node_modules/
+dist/
+native-build/
+__pycache__/
+*.log
+.theos/
+packages/
+ipa-stage*/
+build/
