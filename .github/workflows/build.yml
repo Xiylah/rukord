@@ -27,6 +27,6 @@ jobs:
           make -C RukcordNative package
       - uses: actions/upload-artifact@v4
         with:
-          name: rukcord-alpha-rootless
+          name: rukcord-0.6.1a-rootless
           path: RukcordNative/packages/*_iphoneos-arm64.deb
           if-no-files-found: error

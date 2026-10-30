@@ -44,7 +44,7 @@ export default function unifyRukcordPlugin(
         devOnly: manifest.devOnly,
         toggle(start: boolean) {
             try {
-                start ? startPlugin(manifest.id) : stopPlugin(manifest.id);
+                void (start ? startPlugin(manifest.id) : stopPlugin(manifest.id)).catch(error => console.error(error));
             } catch (e) {
                 console.error(e);
             }

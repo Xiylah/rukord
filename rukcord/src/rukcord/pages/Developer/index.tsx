@@ -1,16 +1,17 @@
 import { findAssetId } from "@api/assets";
-import { connectToDebugger, disconnectFromDebugger, hotReloadTheme, isConnectedToDebugger } from "@api/debug";
+import { connectToDebugger, disconnectFromDebugger, getDebugInfo, hotReloadTheme, isConnectedToDebugger } from "@api/debug";
 import { isLoaderConfigSupported } from "@api/native/loader";
 import { useLoaderConfig, useSettings } from "@api/settings";
 import { ErrorBoundary } from "@api/ui/components";
 import { semanticColors } from "@api/ui/components/color";
 import { createStyles, TextStyleSheet } from "@api/ui/styles";
 import { Strings } from "@i18n";
-import { NavigationNative } from "@metro/common";
+import { clipboard, NavigationNative } from "@metro/common";
 import { LegacyFormText, Stack, TableRow, TableRowGroup, TableSwitchRow, TextInput } from "@metro/common/components";
 import { findByProps } from "@metro/wrappers";
+import { getPluginRuntimeReport } from "@plugins";
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 
 import AssetBrowser from "./AssetBrowser";
 
@@ -58,6 +59,15 @@ export default function Developer() {
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 38 }}>
                 <Stack style={{ paddingVertical: 24, paddingHorizontal: 12 }} spacing={24}>
                     <TableRowGroup title="Plugins">
+                        <TableRow label="Copy plugin diagnostics" onPress={() => {
+                            try {
+                                const { rukcord, discord } = getDebugInfo();
+                                clipboard.setString(JSON.stringify({ rukcord, discord, ...getPluginRuntimeReport() }, null, 2));
+                                Alert.alert("Copied");
+                            } catch (error) {
+                                Alert.alert("Could not copy diagnostics", String(error));
+                            }
+                        }} />
                         <TableSwitchRow label="Developer plugins" subLabel="Show developer plugins in the plugin list" value={settings.developerSettings} onValueChange={(value: boolean) => settings.updateSettings({ developerSettings: value })} />
                     </TableRowGroup>
 

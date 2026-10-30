@@ -80,7 +80,7 @@ const config = {
                                 constModules: {
                                     globals: {
                                         "rukcord-build-info": {
-                                            version: `"v0.6.0-alpha.6"`
+                                            version: `"v0.6.1a"`
                                         }
                                     }
                                 },

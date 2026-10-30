@@ -7,3 +7,6 @@ __pycache__/
 packages/
 ipa-stage*/
 build/
+
+!rukcord/scripts/build/
+!rukcord/scripts/build/**

@@ -1,5 +1,5 @@
 export const customBuild = {
-    version: "v0.4.0-alpha.5",
+    version: "v0.6.1a",
     target: "349.0 / 350.0",
     status: "Experimental; device validation pending",
 };

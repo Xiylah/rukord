@@ -9,7 +9,7 @@ import tarfile
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'dist'
 NATIVE = ROOT / 'RukcordNative'
-VERSION = '0.6.0~alpha6'
+VERSION = '0.6.1a'
 
 def tar_gz(files):
     out = io.BytesIO()
@@ -51,7 +51,8 @@ def build():
     info = plistlib.dumps({
         'CFBundleIdentifier': 'local.rukcord.resources',
         'CFBundleName': 'RukcordResources', 'CFBundlePackageType': 'BNDL',
-        'CFBundleVersion': '6', 'CFBundleShortVersionString': '0.6.0',
+        'CFBundleVersion': '0.6.1', 'CFBundleShortVersionString': '0.6.1',
+        'RukcordVersion': VERSION,
         'CFBundleIconFile': 'rukcord-icon.png',
     })
     files = [

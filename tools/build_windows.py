@@ -19,7 +19,7 @@ env['ZIG_LOCAL_CACHE_DIR'] = str(out / 'zig-local-cache')
 base = [str(zig), 'cc', '-target', 'aarch64-ios.16.0', '-isysroot', str(sdk),
         '-F' + str(sdk / 'System/Library/Frameworks'), '-idirafter', str(sdk / 'usr/include'),
         '-fobjc-arc', '-fblocks', '-O2', '-Wno-deprecated-declarations',
-        '-I' + str(repo / 'Headers'), '-DPACKAGE_VERSION=@"0.6.0-alpha.6"']
+        '-I' + str(repo / 'Headers'), '-DPACKAGE_VERSION=@"0.6.1a"']
 base += ['-DRUKCORD_IPA=' + ('1' if args.target == 'ipa' else '0')]
 objects = []
 for p in sorted((repo / 'Sources').iterdir()):

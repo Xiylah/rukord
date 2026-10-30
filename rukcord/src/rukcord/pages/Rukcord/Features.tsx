@@ -58,7 +58,7 @@ export default function Features() {
                 <Button key={value} text={value} size="sm" variant={filter === value ? "primary" : "secondary"} onPress={() => setFilter(value)} />)}</View>
             {!!safe && <Text color="text-muted" variant="text-sm/normal">Safe mode is on. Turn it off and reload before enabling plugins.</Text>}
             {!!Object.keys(failures ?? {}).length && <Button text="Copy plugin failure report" variant="secondary" onPress={() => {
-                clipboard.setString(JSON.stringify({ rukcord: "0.6.0-alpha.6", failures }, null, 2)); Alert.alert("Copied");
+                clipboard.setString(JSON.stringify({ rukcord: "0.6.1a", failures }, null, 2)); Alert.alert("Copied");
             }} />}
         </View>}
         ListEmptyComponent={<Text color="text-muted" variant="text-md/normal">No plugins match this view.</Text>}

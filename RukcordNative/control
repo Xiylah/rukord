@@ -1,6 +1,6 @@
 Package: local.rukcord.tweak
-Name: Rukcord (Alpha)
-Version: 0.6.0~alpha6
+Name: Rukcord
+Version: 0.6.1a
 Architecture: iphoneos-arm64
 Description: Native Discord mod for iOS 16 / Dopamine rootless; Discord 349.0 and 350.0 targets.
 Maintainer: Rukus

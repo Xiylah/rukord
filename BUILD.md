@@ -19,7 +19,7 @@ python tools/test_font_policy.py
 
 ```sh
 python tools/package_deb.py
-python tools/validate_deb.py dist/local.rukcord.tweak_0.6.0~alpha6_iphoneos-arm64.deb
+python tools/validate_deb.py dist/local.rukcord.tweak_0.6.1a_iphoneos-arm64.deb
 ```
 
 For a sideload IPA, supply your own decrypted Discord 350 IPA:
@@ -27,7 +27,7 @@ For a sideload IPA, supply your own decrypted Discord 350 IPA:
 ```sh
 python tools/build_windows.py --target ipa
 python tools/package_ipa.py /absolute/path/Discord-350-decrypted.ipa dist
-python tools/validate_ipa.py dist/Rukcord-0.6.0-alpha.6-Discord-350.0.ipa
+python tools/validate_ipa.py dist/Rukcord-0.6.1a-Discord-350.0.ipa
 ```
 
 The two native builds use separate outputs. The IPA build always loads its

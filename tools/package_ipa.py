@@ -14,7 +14,7 @@ from ipa_macho import dependency_names, inject
 
 ROOT = Path(__file__).resolve().parent.parent
 LOAD = '@executable_path/Frameworks/Rukcord.dylib'
-VERSION = '0.6.0-alpha.6'
+VERSION = '0.6.1a'
 
 def package(base, destination, upgrade_rukcord=False):
     base, destination = Path(base).resolve(), Path(destination).resolve()
@@ -64,7 +64,7 @@ def package(base, destination, upgrade_rukcord=False):
         template = (ROOT/'RukcordNative/Sources/payload-base.template.js').read_text()
         (resources/'payload-base.js').write_text(template.replace('@PACKAGE_VERSION@', VERSION).replace('@TWEAK_NAME@', 'Rukcord'), encoding='utf-8')
         shutil.copyfile(ROOT/'art/rukcord-mascot.png', resources/'rukcord-icon.png')
-        (resources/'Info.plist').write_bytes(plistlib.dumps({'CFBundleIdentifier': 'local.rukcord.resources', 'CFBundlePackageType': 'BNDL', 'CFBundleVersion': '6'}))
+        (resources/'Info.plist').write_bytes(plistlib.dumps({'CFBundleIdentifier': 'local.rukcord.resources', 'CFBundlePackageType': 'BNDL', 'CFBundleVersion': '0.6.1', 'RukcordVersion': VERSION}))
         shutil.copytree(ROOT/'licenses', app/'RukcordLegal')
         shutil.copyfile(ROOT/'rukcord/LICENSE', app/'RukcordLegal/LICENSE-client')
         shutil.copyfile(ROOT/'RukcordNative/LICENSE', app/'RukcordLegal/LICENSE-loader')

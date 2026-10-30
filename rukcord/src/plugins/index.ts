@@ -6,8 +6,8 @@ import { JSX } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+import { getLifecycleStatus, guardedLifecycle, stopLifecycle } from "./lifecycle";
 import * as t from "./types";
-import { guardedLifecycle } from "./lifecycle";
 
 export const pluginInstances = new Map<string, t.rukcordPlugin>();
 let _setupPromise: Promise<void> | null = null;
@@ -31,8 +31,8 @@ export const usePluginSettings = create<PluginSettingsStore>()(
     persist(
         (set, get) => ({
             failures: {},
-            recordFailure: (id,error)=>set(state=>({failures:{...state.failures,[id]:{message:String(error).slice(0,300),time:new Date().toISOString()}}})),
-            clearFailure: id=>set(state=>{const failures={...state.failures};delete failures[id];return {failures};}),
+            recordFailure: (id,error)=>set(state=>({ failures:{ ...state.failures,[id]:{ message:String(error).slice(0,300),time:new Date().toISOString() } } })),
+            clearFailure: id=>set(state=>{ const failures={ ...state.failures };delete failures[id];return { failures }; }),
             settings: {},
             _hasHydrated: false,
             updatePluginSetting: (id: string, enabled: boolean) => {
@@ -79,7 +79,7 @@ async function runPluginLifecycle(id: string, method: "start" | "eagerStart"): P
         return;
     }
 
-    await guardedLifecycle(instance, method, {success() {
+    await guardedLifecycle(instance, method, { success() {
         const run = instance[method];
         if (method === "start" || run) usePluginSettings.getState().updatePluginSetting(id, true);
         usePluginSettings.getState().clearFailure(id);
@@ -88,7 +88,7 @@ async function runPluginLifecycle(id: string, method: "start" | "eagerStart"): P
         if(!isPluginCore(id))usePluginSettings.getState().updatePluginSetting(id,false);
         const errorMsg = `[${id}] Failed: ${error}`;
         method === "start" ? showToast(errorMsg) : console.error(errorMsg, error);
-    }});
+    } });
 }
 
 export const startPlugin = (id: string): Promise<void> => runPluginLifecycle(id, "start");
@@ -99,11 +99,15 @@ export async function stopPlugin(id: string): Promise<void> {
     assert(instance, id, "stop a non-started plugin");
 
     try {
-        await instance.stop?.();
-        usePluginSettings.getState().updatePluginSetting(id, false);
+        await stopLifecycle(instance);
+        usePluginSettings.getState().clearFailure(id);
     } catch (error) {
+        usePluginSettings.getState().recordFailure(id, error);
         console.error(`[${id}] Failed to stop:`, error);
         throw error;
+    } finally {
+        // Persist the disabled choice even if teardown needs a reload.
+        usePluginSettings.getState().updatePluginSetting(id, false);
     }
 }
 
@@ -186,4 +190,18 @@ export function definePlugin(instance: t.rukcordPlugin): t.rukcordPlugin {
 
 export function getPluginSettingsComponent(id: string): (() => JSX.Element) | null {
     return pluginInstances.get(id)?.settings || null;
+}
+
+export function getPluginRuntimeReport() {
+    const { settings, failures } = usePluginSettings.getState();
+    return {
+        schema: 1,
+        safeMode: !!useSettings.getState().safeMode,
+        plugins: Array.from(pluginInstances, ([id, plugin]) => ({
+            id,
+            enabled: settings[id]?.enabled ?? isPluginCore(id),
+            ...getLifecycleStatus(plugin),
+            failure: failures[id],
+        })),
+    };
 }

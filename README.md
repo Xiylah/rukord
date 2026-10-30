@@ -1,6 +1,6 @@
 # Rukcord
 
-Discord mod for iOS, based on the working 0.4.0-alpha.5 release.
+Discord mod for iOS.
 This build targets Discord 350.0 and requires iOS 16 or newer.
 
 - Rootless deb for Dopamine.
